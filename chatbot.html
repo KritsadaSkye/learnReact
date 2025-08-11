@@ -18,13 +18,26 @@
         function ChatInput({ chatMessages, sendChatMessage }) {
 
             const [inputText, setInputText] = React.useState('');
+            const [isLoading,setIsLoading] = React.useState(false);
 
             function saveInputText(event) {
                 setInputText(event.target.value);
             }
 
-            function sendMessage() {
-                const response = Chatbot.getResponse(inputText);
+            function handdleKeyDown(event){
+                if(event.key==='Enter'){
+                    sendMessage();
+                }
+                else if(event.key ==='Escape'){
+                    setInputText('');
+                }
+            }
+
+
+            async function sendMessage() {
+                if(isLoading || inputText === ''){
+                    return;
+                }
 
                 const newChat = [
                     ...chatMessages,
@@ -35,19 +48,31 @@
                     }
                 ];
 
-                sendChatMessage(newChat);
+                setInputText('');
 
                 sendChatMessage([
-                    ...newChat,
-                    {
-                        message: response,
-                        sender: 'robot',
-                        id: crypto.randomUUID()
-                    }
-                ]
-                );
+                ...newChat,
+                {
+                    message: 'loading...',
+                    sender: 'robot',
+                    id: crypto.randomUUID()
+                }
+                ]);
 
-                setInputText('');
+                setIsLoading(true);
+
+
+                const response = await Chatbot.getResponseAsync(inputText);
+                sendChatMessage([
+                ...newChat,
+                {
+                    message: response,
+                    sender: 'robot',
+                    id: crypto.randomUUID()
+                }
+                ]);
+
+                setIsLoading(false);
             }
 
             return (
@@ -56,6 +81,8 @@
                         placeholder="Send a Message to Chatbot"
                         onChange={saveInputText}
                         value={inputText}
+
+                        onKeyDown={handdleKeyDown}
                     />
                     <button onClick={sendMessage}>Send</button>
                 </> //Fragment replace <div>
@@ -87,11 +114,11 @@
             return (
                 <div>
                     {sender === 'robot' && (
-                        <img src="image/robot.png" width="50" />
+                        <img src="images/robot.png" width="50" />
                     )}
                     {message}
                     {sender === "user" && (
-                        <img src="image/user.png" width="50" />
+                        <img src="images/user.png" width="50" />
                     )}
                 </div>
             );
@@ -164,9 +191,6 @@
                     <ChatInput
                         chatMessages={chatMessages}
                         sendChatMessage={sendChatMessage}
-                    />
-                    <ChatMessages
-                        chatMessages={chatMessages}
                     />
                     <ChatMessages
                         chatMessages={chatMessages}

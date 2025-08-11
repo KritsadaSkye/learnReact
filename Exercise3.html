@@ -42,9 +42,19 @@
                 setInputText(event.target.value);
             }
 
+            function reset() {
+                setInputText('')
+            }
+
+            function example(){
+                setInputText('Alice')
+            }
+
             return (
                 <div>
-                    <input onChange={textBar} />
+                    <input onChange={textBar} value={inputText} />
+                    <button onClick={reset}>reset</button>
+                    <button onClick={example}>example</button>
                     <div>
                         Hello {inputText}
                     </div>
