@@ -1,5 +1,6 @@
 import RobotProfileImage from '../assets/robot.png';
-import UserProfileImage from '../assets/user.png';
+import UserProfileImage from '../assets/profile-1.jpg';
+
 import './ChatMessage.css';
 
 //function ChatMessage(props) {
