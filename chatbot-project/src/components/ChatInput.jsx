@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Chatbot } from 'supersimpledev'
+import dayjs from 'dayjs';
 import LoadingSpinner from '../assets/loading-spinner.gif';
 import './ChatInput.css'
 
@@ -24,6 +25,7 @@ export function ChatInput({ chatMessages, sendChatMessage }) {
 
 
     async function sendMessage() {
+
         if (isLoading || inputText === '') {
             return;
         }
@@ -33,7 +35,8 @@ export function ChatInput({ chatMessages, sendChatMessage }) {
             {
                 message: inputText,
                 sender: 'user',
-                id: crypto.randomUUID()
+                id: crypto.randomUUID(),
+                time: dayjs().valueOf()
             }
         ];
 
@@ -44,7 +47,7 @@ export function ChatInput({ chatMessages, sendChatMessage }) {
             {
                 message: <img src={LoadingSpinner} width="20px" />,
                 sender: 'robot',
-                id: crypto.randomUUID()
+                id: crypto.randomUUID(),
             }
         ]);
 
@@ -57,11 +60,16 @@ export function ChatInput({ chatMessages, sendChatMessage }) {
             {
                 message: response,
                 sender: 'robot',
-                id: crypto.randomUUID()
+                id: crypto.randomUUID(),
+                time: dayjs().valueOf()
             }
         ]);
 
         setIsLoading(false);
+    }
+
+    function clearMessages() {
+        sendChatMessage([]);
     }
 
     return (
@@ -76,7 +84,15 @@ export function ChatInput({ chatMessages, sendChatMessage }) {
             />
             <button
                 className="send-button"
-                onClick={sendMessage}>Send</button>
+                onClick={sendMessage}>Send
+            </button>
+            <button
+                className="clear-button"
+                onClick={clearMessages}
+            >
+                Clear
+            </button>
+
         </div> //Fragment replace <div>
     );
 }
