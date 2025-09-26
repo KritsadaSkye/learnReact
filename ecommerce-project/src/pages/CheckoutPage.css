@@ -74,6 +74,7 @@
   font-size: 19px;
   margin-top: 5px;
   margin-bottom: 22px;
+  text-align: start;
 }
 
 .checkout-page .cart-item-details-grid {
