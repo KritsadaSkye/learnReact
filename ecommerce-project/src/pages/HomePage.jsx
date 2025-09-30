@@ -8,12 +8,12 @@ export function HomePage() {
     const [cart, setCart] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:3000/api/products')
+        axios.get('/api/products')
             .then((response) => {
                 setProducts(response.data);
             });
 
-        axios.get('http://localhost:3000/api/cart-items')
+        axios.get('/api/cart-items')
             .then((response) => {
                 setCart(response.data);
             });
@@ -41,7 +41,7 @@ export function HomePage() {
                                 </div>
 
                                 <div className="product-rating-container">
-                                    <img className={`product-rating-stars" src="images/ratings/rating-${product.rating.stars * 10}.png`} />
+                                    <img className="product-rating-stars" src={`images/ratings/rating-${product.rating.stars * 10}.png`} />
                                     <div className="product-rating-count link-primary">
                                         {product.rating.count}
                                     </div>
