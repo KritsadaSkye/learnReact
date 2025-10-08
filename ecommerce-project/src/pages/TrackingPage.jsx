@@ -8,29 +8,45 @@ import './TrackingPage.css';
 export function TrackingPage({ cart }) {
 
     const { orderId, productId } = useParams();
-    const [trackingData, setTrackingData] = useState(null);
+    const [order, setOrder] = useState(null);
 
 
     useEffect(() => {
-        const fetchTrackingData = async () => {
+        const fetchorder = async () => {
             const response = await axios(`/api/orders/${orderId}?expand=products`);
 
-            setTrackingData(response.data);
+            setOrder(response.data);
         }
 
-        fetchTrackingData();
+        fetchorder();
     }, [orderId])
 
-    if (!trackingData) {
+
+    if (!order) {
         return null;
     }
 
-    const orderProduct = trackingData.products
+    const orderProduct = order.products
         .find((order) => {
             return order.productId === productId;
         });
 
     console.log(orderProduct);
+
+    const totalDeliveryTimeMs = (orderProduct.estimatedDeliveryTimeMs - order.orderTimeMs);
+    const timePassedMs = dayjs().valueOf() - order.orderTimeMs;
+
+    console.log(totalDeliveryTimeMs);
+
+
+    let deliveryPercent = (timePassedMs / totalDeliveryTimeMs) * 100;
+
+    console.log(deliveryPercent);
+
+
+    if (deliveryPercent > 100) {
+        deliveryPercent = 100;
+    }
 
     return (
         <>
@@ -70,10 +86,12 @@ export function TrackingPage({ cart }) {
                     </div>
 
                     <div className="progress-bar-container">
-                        <div className="progress-bar"></div>
+                        <div className="progress-bar" style={{
+                            width: `${deliveryPercent}%`
+                        }}></div>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 }
