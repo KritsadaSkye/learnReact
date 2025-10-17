@@ -2,7 +2,6 @@ import { Product } from './Product';
 
 export function ProductsGrid({ products, loadCart }) {
 
-
     return (
         <div className="products-grid">
 
