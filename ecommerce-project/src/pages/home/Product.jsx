@@ -12,6 +12,11 @@ export function Product({ product, loadCart }) {
         });
 
         await loadCart();
+        setAdded(true);
+
+        setTimeout(() => {
+            setAdded(false);
+        }, 2000);
     }
 
     const selectQuantity = (event) => {
@@ -19,6 +24,8 @@ export function Product({ product, loadCart }) {
         setQuantity(quantitySelected);
 
     }
+
+    const [added, setAdded] = useState(false);
 
     return (
         <div className="product-container">
@@ -58,7 +65,7 @@ export function Product({ product, loadCart }) {
 
             <div className="product-spacer"></div>
 
-            <div className="added-to-cart">
+            <div className="added-to-cart" style={{ opacity: added ? 1 : 0 }}>
                 <img src="images/icons/checkmark.png" />
                 Added
             </div>
@@ -66,6 +73,6 @@ export function Product({ product, loadCart }) {
             <button className="add-to-cart-button button-primary" onClick={(addToCart)}>
                 Add to Cart
             </button>
-        </div>
+        </div >
     );
 }
